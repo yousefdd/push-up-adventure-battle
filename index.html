@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Push Up Adventure Battle</title>
+<meta name="description" content="لعبة مغامرة تلعبها بتمارين الضغط الحقيقية: الكاميرا تعدّ كل ضغطة صحيحة، وكل ضغطة ضربة على الوحش. حمّلها مجاناً لأندرويد.">
+<meta property="og:title" content="Push Up Adventure Battle">
+<meta property="og:description" content="كل ضغطة صحيحة ضربة على الوحش. مغامرة أوفلاين وسباقات أونلاين مصنّفة.">
+<meta property="og:image" content="img/og.jpg">
+<meta name="theme-color" content="#0d0a1b">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Lilita+One&family=Tajawal:wght@500;700;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0a1b; --bg-deep: #05030e; --surface: #181327; --surface2: #120e20; --surface3: #231c39;
+    --border: #2a2342; --border2: #3a3155;
+    --ink: #f1ecdf; --ink2: #a99fc4; --ink3: #8b82a8;
+    --brand: #f2764d; --brand-edge: #b8431f; --gold: #ffc94a; --gold-edge: #c9881a;
+    --vigor: #5fd08c; --mana: #6ba8ff; --arcane: #a98cff; --void: #d25bff;
+    --radius: 22px;
+    --display: 'Lalezar', 'Lilita One', system-ui, sans-serif;
+    --body: 'Tajawal', 'Nunito', system-ui, sans-serif;
+  }
+  html[lang=en] { --display: 'Lilita One', 'Lalezar', system-ui, sans-serif; --body: 'Nunito', 'Tajawal', system-ui, sans-serif; }
+  html[lang=ar] .en, html[lang=en] .ar { display: none !important; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6;
+    background-image: radial-gradient(1200px 600px at 50% -200px, #2a1840 0%, transparent 70%);
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* Top bar */
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Lilita One', sans-serif; font-size: 19px; }
+  .brand img { width: 40px; height: 40px; border-radius: 11px; }
+  .lang {
+    background: var(--surface); color: var(--ink); border: 2px solid var(--border2); border-radius: 999px;
+    padding: 6px 14px; font: 800 14px var(--body); cursor: pointer;
+  }
+  .lang:focus-visible, .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: center; padding: 28px 0 56px; }
+  .hero-icon { width: 108px; height: 108px; border-radius: 28px; box-shadow: 0 12px 40px #1b6bff55; margin-bottom: 18px; }
+  h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 6vw, 64px); line-height: 1.1; margin: 0 0 12px; }
+  h1 .hl { color: var(--brand); }
+  .lead { color: var(--ink2); font-size: 19px; margin: 0 0 26px; max-width: 520px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer;
+    background: linear-gradient(180deg, #ff9466, var(--brand)); color: #fff; border: 0;
+    border-bottom: 5px solid var(--brand-edge); border-radius: 20px; padding: 14px 26px 12px;
+    font: 400 24px var(--display); box-shadow: 0 10px 30px #f2764d44; transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+  .btn svg { width: 28px; height: 28px; flex: none; }
+  .btn small { display: block; font: 700 13px var(--body); opacity: .9; margin-top: -2px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--ink3); font-size: 14px; font-weight: 700; margin-top: 14px; }
+  .meta span::before { content: '•'; margin-inline-end: 6px; color: var(--border2); }
+  .meta span:first-child::before { content: none; }
+
+  .phone {
+    justify-self: center; width: min(300px, 78vw); aspect-ratio: 390 / 844; border-radius: 40px; padding: 10px;
+    background: linear-gradient(160deg, #3a3155, #120e20); box-shadow: 0 30px 80px #000a, 0 0 0 2px var(--border2);
+    transform: rotate(-3deg);
+  }
+  html[dir=ltr] .phone { transform: rotate(3deg); }
+  .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 31px; display: block; }
+
+  /* Sections */
+  section { padding: 44px 0; }
+  h2 { font-family: var(--display); font-weight: 400; font-size: clamp(28px, 4vw, 40px); margin: 0 0 8px; text-align: center; }
+  .sub { text-align: center; color: var(--ink2); margin: 0 auto 30px; max-width: 560px; }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .card .ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 26px; margin-bottom: 12px; }
+  .card h3 { font-family: var(--display); font-weight: 400; font-size: 23px; margin: 0 0 6px; }
+  .card p { color: var(--ink2); margin: 0; font-size: 16px; }
+
+  .shots { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 4px 18px; scrollbar-width: thin; }
+  .shots figure { flex: 0 0 210px; margin: 0; scroll-snap-align: center; }
+  .shots img { width: 100%; aspect-ratio: 390/844; object-fit: cover; border-radius: 24px; border: 2px solid var(--border2); display: block; background: var(--surface2); }
+  .shots figcaption { text-align: center; color: var(--ink2); font-weight: 800; font-size: 15px; margin-top: 8px; }
+
+  .ranks { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .rank { padding: 8px 16px; border-radius: 999px; font-weight: 800; border: 2px solid; background: var(--surface2); }
+  .rank.mystery { border-color: var(--void); color: var(--void); box-shadow: 0 0 18px #d25bff66; letter-spacing: 2px; }
+
+  .steps { counter-reset: s; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; list-style: none; padding: 0; margin: 0; }
+  .steps li { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 20px 18px; position: relative; }
+  .steps li::before {
+    counter-increment: s; content: counter(s); display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+    background: var(--gold); color: #3a2400; font: 400 22px var(--display); margin-bottom: 10px;
+  }
+  .steps b { display: block; font-size: 17px; margin-bottom: 4px; }
+  .steps span { color: var(--ink2); font-size: 15px; }
+  .note { margin: 18px auto 0; max-width: 720px; text-align: center; color: var(--ink3); font-size: 14px; }
+
+  .cta { text-align: center; background: linear-gradient(160deg, #2a1d2a, var(--surface)); border: 2px solid var(--border2); border-radius: 30px; padding: 40px 18px; }
+  .cta h2 { margin-bottom: 18px; }
+
+  footer { color: var(--ink3); font-size: 14px; text-align: center; padding: 30px 0 40px; }
+  footer a { color: var(--ink2); }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 8px; }
+    .hero-icon { margin-inline: auto; }
+    .lead { margin-inline: auto; }
+    .meta { justify-content: center; }
+    .phone { order: 2; transform: none !important; }
+    .features { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 460px) {
+    .steps { grid-template-columns: 1fr; }
+    .btn { font-size: 21px; padding: 13px 20px 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="brand" href="#"><img src="img/favicon.png" alt="">Push Up Adventure Battle</a>
+    <button class="lang" id="lang" type="button" aria-label="Switch language">English</button>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <img class="hero-icon" src="img/icon.webp" alt="">
+        <h1>
+          <span class="ar">كل ضغطة <span class="hl">ضربة</span> على الوحش</span>
+          <span class="en">Every push-up is a <span class="hl">strike</span></span>
+        </h1>
+        <p class="lead">
+          <span class="ar">لعبة مغامرة تلعبها بجسمك. ضع الهاتف أمامك، والكاميرا تعدّ ضغطاتك الصحيحة فقط، وبطلك يقاتل بها الوحوش عبر 15 عالماً، أو يسابق لاعبين حقيقيين أونلاين.</span>
+          <span class="en">An adventure you play with your body. Prop your phone up, the camera counts only correct push-ups, and your hero fights with them across 15 worlds, or races real players online.</span>
+        </p>
+        <a class="btn download" href="https://github.com/yousefdd/push-up-adventure-battle/releases/latest/download/PushUpAdventureBattle.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6 11 6 6 6-6"/><path d="M4 21h16"/></svg>
+          <span>
+            <span class="ar">حمّل مجاناً</span><span class="en">Download free</span>
+            <small><span class="ar">لأجهزة أندرويد</span><span class="en">for Android</span></small>
+          </span>
+        </a>
+        <div class="meta">
+          <span class="ar">مجانية</span><span class="en">Free</span>
+          <span class="ar">أندرويد 7.0 فأعلى</span><span class="en">Android 7.0+</span>
+          <span class="ar">عربي و English</span><span class="en">English and Arabic</span>
+        </div>
+      </div>
+      <div class="phone"><img src="img/battle.webp" alt="شاشة معركة في اللعبة"></div>
+    </div>
+
+    <section id="features">
+      <h2><span class="ar">ماذا في اللعبة؟</span><span class="en">What's inside</span></h2>
+      <p class="sub"><span class="ar">تمرين حقيقي، بطعم لعبة.</span><span class="en">A real workout that plays like a game.</span></p>
+      <div class="features">
+        <div class="card">
+          <div class="ico" style="background:#15271e">📷</div>
+          <h3><span class="ar">الكاميرا تعدّ عنك</span><span class="en">The camera counts</span></h3>
+          <p><span class="ar">تُحسب الضغطة الصحيحة فقط: انزل جيداً واصعد وجسمك مستقيم. الصور لا تغادر هاتفك أبداً.</span><span class="en">Only a correct rep counts: all the way down, all the way up, body straight. Frames never leave your phone.</span></p>
+        </div>
+        <div class="card">
+          <div class="ico" style="background:#141f30">🗺️</div>
+          <h3><span class="ar">مغامرة بلا إنترنت</span><span class="en">Offline adventure</span></h3>
+          <p><span class="ar">15 عالماً وعشرات الوحوش والزعماء، ومعدات تدمجها، وأبطال تختار بينهم.</span><span class="en">15 worlds, dozens of foes and bosses, gear to merge and heroes to pick from.</span></p>
+        </div>
+        <div class="card">
+          <div class="ico" style="background:#2a1d2a">⚔️</div>
+          <h3><span class="ar">سباقات أونلاين مصنّفة</span><span class="en">Ranked online races</span></h3>
+          <p><span class="ar">سابق لاعباً حقيقياً: من يكمل ضغطات صحيحة أكثر يفوز ويصعد في الرتب.</span><span class="en">Race a real player: more correct reps wins, and you climb the ranks.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screens">
+      <h2><span class="ar">لقطات من اللعبة</span><span class="en">Screenshots</span></h2>
+      <p class="sub"><span class="ar">اسحب لترى المزيد.</span><span class="en">Swipe for more.</span></p>
+      <div class="shots">
+        <figure><img src="img/home.webp" alt="" loading="lazy"><figcaption><span class="ar">الرئيسية</span><span class="en">Home</span></figcaption></figure>
+        <figure><img src="img/adventure.webp" alt="" loading="lazy"><figcaption><span class="ar">العوالم</span><span class="en">Worlds</span></figcaption></figure>
+        <figure><img src="img/battle.webp" alt="" loading="lazy"><figcaption><span class="ar">المعركة</span><span class="en">Battle</span></figcaption></figure>
+        <figure><img src="img/rank.webp" alt="" loading="lazy"><figcaption><span class="ar">الرتب</span><span class="en">Ranks</span></figcaption></figure>
+        <figure><img src="img/store.webp" alt="" loading="lazy"><figcaption><span class="ar">المتجر</span><span class="en">Store</span></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="ranks">
+      <h2><span class="ar">ثماني رتب… والأخيرة سرّ</span><span class="en">Eight ranks… the last is a secret</span></h2>
+      <p class="sub"><span class="ar">لكل رتبة ثلاث درجات، والصعود يصعب كلما ارتفعت. اجمع العملات الفضية وعملات سيندر الذهبية.</span><span class="en">Three divisions each, and every climb gets harder. Earn silver coins and gold Cinder Coins.</span></p>
+      <div class="ranks">
+        <span class="rank" style="border-color:#d08a4e;color:#d08a4e"><span class="ar">برونز</span><span class="en">Bronze</span></span>
+        <span class="rank" style="border-color:#dde5f0;color:#dde5f0"><span class="ar">سيلفر</span><span class="en">Silver</span></span>
+        <span class="rank" style="border-color:#ffd25a;color:#ffd25a"><span class="ar">غولد</span><span class="en">Gold</span></span>
+        <span class="rank" style="border-color:#6ff0dc;color:#6ff0dc"><span class="ar">بلاتينيوم</span><span class="en">Platinum</span></span>
+        <span class="rank" style="border-color:#7db8ff;color:#7db8ff"><span class="ar">دايموند</span><span class="en">Diamond</span></span>
+        <span class="rank" style="border-color:#c3a6ff;color:#c3a6ff"><span class="ar">ماستر</span><span class="en">Master</span></span>
+        <span class="rank" style="border-color:#ff7a7a;color:#ff7a7a"><span class="ar">غراند ماستر</span><span class="en">Grandmaster</span></span>
+        <span class="rank mystery">???</span>
+      </div>
+    </section>
+
+    <section id="install">
+      <h2><span class="ar">طريقة التثبيت</span><span class="en">How to install</span></h2>
+      <p class="sub"><span class="ar">اللعبة ليست على Google Play بعد، فتُثبَّت من الملف مباشرة.</span><span class="en">The game isn't on Google Play yet, so you install it from the file.</span></p>
+      <ol class="steps">
+        <li><b><span class="ar">حمّل الملف</span><span class="en">Download</span></b><span><span class="ar">اضغط زر التحميل من هاتف أندرويد.</span><span class="en">Tap the download button on your Android phone.</span></span></li>
+        <li><b><span class="ar">افتحه</span><span class="en">Open it</span></b><span><span class="ar">من الإشعارات أو من مجلد التنزيلات.</span><span class="en">From the notification or your Downloads folder.</span></span></li>
+        <li><b><span class="ar">اسمح بالتثبيت</span><span class="en">Allow it</span></b><span><span class="ar">إن طلب الهاتف، فعّل «السماح من هذا المصدر».</span><span class="en">If asked, turn on "Allow from this source".</span></span></li>
+        <li><b><span class="ar">ثبّت والعب</span><span class="en">Install and play</span></b><span><span class="ar">اسمح باستخدام الكاميرا عند أول تشغيل.</span><span class="en">Allow the camera the first time you play.</span></span></li>
+      </ol>
+      <p class="note"><span class="ar">قد يظهر تنبيه من Google Play Protect لأن التطبيق جديد؛ اختر «التثبيت على أي حال».</span><span class="en">Google Play Protect may warn you because the app is new; choose "Install anyway".</span></p>
+    </section>
+
+    <section>
+      <div class="cta">
+        <h2><span class="ar">جاهز للقتال؟</span><span class="en">Ready to fight?</span></h2>
+        <a class="btn download" href="https://github.com/yousefdd/push-up-adventure-battle/releases/latest/download/PushUpAdventureBattle.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6 11 6 6 6-6"/><path d="M4 21h16"/></svg>
+          <span><span class="ar">حمّل اللعبة</span><span class="en">Get the game</span></span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="privacy.html"><span class="ar">سياسة الخصوصية</span><span class="en">Privacy policy</span></a></p>
+    <p>© 2026 Push Up Adventure Battle</p>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var html = document.documentElement, btn = document.getElementById('lang');
+    function set(l) {
+      html.lang = l; html.dir = l === 'ar' ? 'rtl' : 'ltr';
+      btn.textContent = l === 'ar' ? 'English' : 'العربية';
+      try { localStorage.setItem('lang', l); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    // Arabic first; English on request.
+    set(saved === 'en' ? 'en' : 'ar');
+    btn.addEventListener('click', function () { set(html.lang === 'ar' ? 'en' : 'ar'); });
+  })();
+</script>
+</body>
+</html>
