@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Push Up Adventure Battle</title>
-<meta name="description" content="لعبة مغامرة تلعبها بتمارين الضغط الحقيقية: الكاميرا تعدّ كل ضغطة صحيحة، وكل ضغطة ضربة على الوحش. حمّلها مجاناً لأندرويد.">
+<meta name="description" content="تمرّن واربح: اهزم لاعبين حقيقيين في سباقات الضغط، اجمع عملات سيندر والعملات الفضية، وقريباً استبدلها ببطاقات شحن ورصيد. حمّلها مجاناً لأندرويد.">
 <meta property="og:title" content="Push Up Adventure Battle">
-<meta property="og:description" content="كل ضغطة صحيحة ضربة على الوحش. مغامرة أوفلاين وسباقات أونلاين مصنّفة.">
+<meta property="og:description" content="تمرّن، اربح النقاط، واستبدلها بجوائز. سباقات ضغط أونلاين مصنّفة وعملات سيندر.">
 <meta property="og:image" content="img/og.jpg">
 <meta name="theme-color" content="#0d0a1b">
 <link rel="icon" href="img/favicon.png">
@@ -87,6 +87,22 @@
   .card h3 { font-family: var(--display); font-weight: 400; font-size: 23px; margin: 0 0 6px; }
   .card p { color: var(--ink2); margin: 0; font-size: 16px; }
 
+  .earn { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .coin { width: 52px; height: 52px; border-radius: 50%; margin-bottom: 12px; position: relative; }
+  .coin::after { content: '🔥'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 22px; }
+  .coin.gold { background: radial-gradient(circle at 35% 30%, #fff2b8, #ffc94a 45%, #c9881a); box-shadow: 0 0 20px #ffc94a66, inset 0 0 0 3px #a86a10; }
+  .coin.silver { background: radial-gradient(circle at 35% 30%, #ffffff, #c9d3e3 45%, #7d8ba3); box-shadow: 0 0 18px #dde5f055, inset 0 0 0 3px #5d6a80; }
+  .coin.silver::after { filter: grayscale(1) brightness(1.4); }
+  .pay { list-style: none; margin: 14px 0 0; padding: 12px 0 0; border-top: 2px solid var(--border); }
+  .pay li { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; color: var(--ink); padding: 3px 0; }
+  .pay b { color: var(--vigor); }
+  .pay b.down { color: #ff5c7a; }
+  .prizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .prize { position: relative; background: var(--surface); border: 2px solid var(--border2); border-radius: var(--radius); padding: 18px; text-align: center; }
+  .prize .pic { height: 120px; border-radius: 16px; display: grid; place-items: center; font-size: 54px; margin-bottom: 14px; box-shadow: inset 0 -30px 40px #0003; }
+  .prize b { display: block; font-family: var(--display); font-weight: 400; font-size: 22px; }
+  .prize .d { color: var(--ink2); font-size: 15px; }
+  .soon { position: absolute; top: 12px; inset-inline-end: 12px; background: var(--bg); color: var(--gold); border: 2px solid var(--gold-edge); border-radius: 999px; padding: 2px 12px; font-weight: 800; font-size: 14px; }
   .shots { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 4px 18px; scrollbar-width: thin; }
   .shots figure { flex: 0 0 210px; margin: 0; scroll-snap-align: center; }
   .shots img { width: 100%; aspect-ratio: 390/844; object-fit: cover; border-radius: 24px; border: 2px solid var(--border2); display: block; background: var(--surface2); }
@@ -94,7 +110,7 @@
 
   .ranks { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
   .rank { padding: 8px 16px; border-radius: 999px; font-weight: 800; border: 2px solid; background: var(--surface2); }
-  .rank.mystery { border-color: var(--void); color: var(--void); box-shadow: 0 0 18px #d25bff66; letter-spacing: 2px; }
+  .rank.champ { border-color: var(--void); color: #e7c6ff; background: linear-gradient(150deg, #2b0f5e, #120830); box-shadow: 0 0 18px #d25bff66; }
 
   .steps { counter-reset: s; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; list-style: none; padding: 0; margin: 0; }
   .steps li { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 20px 18px; position: relative; }
@@ -118,7 +134,7 @@
     .lead { margin-inline: auto; }
     .meta { justify-content: center; }
     .phone { order: 2; transform: none !important; }
-    .features { grid-template-columns: 1fr; }
+    .features, .earn, .prizes { grid-template-columns: 1fr; }
     .steps { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 460px) {
@@ -140,12 +156,12 @@
       <div>
         <img class="hero-icon" src="img/icon.webp" alt="">
         <h1>
-          <span class="ar">كل ضغطة <span class="hl">ضربة</span> على الوحش</span>
-          <span class="en">Every push-up is a <span class="hl">strike</span></span>
+          <span class="ar">تمرّن، <span class="hl">اربح النقاط</span>، واستبدلها بجوائز</span>
+          <span class="en">Work out, <span class="hl">earn points</span>, swap them for prizes</span>
         </h1>
         <p class="lead">
-          <span class="ar">لعبة مغامرة تلعبها بجسمك. ضع الهاتف أمامك، والكاميرا تعدّ ضغطاتك الصحيحة فقط، وبطلك يقاتل بها الوحوش عبر 15 عالماً، أو يسابق لاعبين حقيقيين أونلاين.</span>
-          <span class="en">An adventure you play with your body. Prop your phone up, the camera counts only correct push-ups, and your hero fights with them across 15 worlds, or races real players online.</span>
+          <span class="ar">كل ضغطة صحيحة تعدّها الكاميرا تقرّبك من الفوز. اهزم لاعبين حقيقيين في سباقات الضغط، اجمع عملات سيندر الذهبية والعملات الفضية، واصعد في الرتب حتى «بطل». قريباً تستبدل عملاتك ببطاقات شحن فري فاير وببجي ورصيد الجوال.</span>
+          <span class="en">Every correct push-up the camera counts brings you closer to a win. Beat real players in push-up races, collect gold Cinder Coins and silver coins, and climb to Champion. Soon you'll swap your coins for Free Fire and PUBG top-ups and phone credit.</span>
         </p>
         <a class="btn download" href="https://github.com/yousefdd/push-up-adventure-battle-app/releases/latest/download/PushUpAdventureBattle.apk">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6 11 6 6 6-6"/><path d="M4 21h16"/></svg>
@@ -161,8 +177,54 @@
         </div>
         <p class="old"><a href="https://github.com/yousefdd/push-up-adventure-battle-app/releases/latest/download/PushUpAdventureBattle-32bit.apk"><span class="ar">هاتف قديم؟ حمّل نسخة 32-bit</span><span class="en">Older phone? Get the 32-bit version</span></a></p>
       </div>
-      <div class="phone"><img src="img/battle.webp" alt="شاشة معركة في اللعبة"></div>
+      <div class="phone"><img src="img/store.webp" alt="متجر الجوائز في اللعبة"></div>
     </div>
+
+    <section id="earn">
+      <h2><span class="ar">كيف تربح النقاط؟</span><span class="en">How you earn</span></h2>
+      <p class="sub"><span class="ar">نقاط التقييم ترفع رتبتك، والعملات تُستبدل بالجوائز. كلما ارتفعت رتبتك صار الربح أصعب وأثمن.</span><span class="en">Rating points raise your rank; coins buy prizes. The higher you climb, the harder and richer every win.</span></p>
+      <div class="earn">
+        <div class="card">
+          <div class="coin gold" aria-hidden="true"></div>
+          <h3><span class="ar">عملات سيندر الذهبية</span><span class="en">Gold Cinder Coins</span></h3>
+          <p><span class="ar">العملة الثمينة. تربحها من الفوز في السباقات من رتبة دايموند فما فوق، ومن العوالم الصعبة.</span><span class="en">The rare one. Won in ranked races from Diamond up, and in the hardest worlds.</span></p>
+          <ul class="pay">
+            <li><span class="ar">فوز في سباق مصنّف</span><span class="en">Ranked win</span><b dir="ltr">+2…4</b></li>
+            <li><span class="ar">العالم 8 فما فوق أو الكابوس</span><span class="en">World 8+ or Nightmare</span><b dir="ltr">+1</b></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="coin silver" aria-hidden="true"></div>
+          <h3><span class="ar">العملات الفضية</span><span class="en">Silver coins</span></h3>
+          <p><span class="ar">تربحها من الفوز في السباقات تحت رتبة دايموند، ومن إنهاء العوالم الأولى.</span><span class="en">Won in ranked races below Diamond, and by clearing the early worlds.</span></p>
+          <ul class="pay">
+            <li><span class="ar">فوز في سباق مصنّف</span><span class="en">Ranked win</span><b dir="ltr">+3…6</b></li>
+            <li><span class="ar">إنهاء العوالم 1 إلى 7</span><span class="en">Clear worlds 1–7</span><b dir="ltr">+2</b></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ico" style="background:#2a1d2a">📈</div>
+          <h3><span class="ar">نقاط التقييم</span><span class="en">Rating points</span></h3>
+          <p><span class="ar">تفوز على منافس فتأخذ نقاطاً من تقييمه، وتخسر فتُخصم منك. المنافس الأقوى يعطي أكثر.</span><span class="en">Beat a rival and take rating from them; lose and you drop. Stronger rivals pay more.</span></p>
+          <ul class="pay">
+            <li><span class="ar">فوز</span><span class="en">Win</span><b dir="ltr" class="up">▲</b></li>
+            <li><span class="ar">خسارة</span><span class="en">Loss</span><b dir="ltr" class="down">▼</b></li>
+          </ul>
+        </div>
+      </div>
+      <p class="note"><span class="ar">لحماية الجوائز من الغش: الكاميرا وحدها تعدّ الضغطات، وللربح حدّ يومي، ولا يُحسب أكثر من 3 انتصارات في اليوم على نفس المنافس.</span><span class="en">To keep prizes fair: only the camera counts reps, earnings have a daily cap, and only 3 wins a day over the same rival pay.</span></p>
+    </section>
+
+    <section id="prizes">
+      <h2><span class="ar">الجوائز</span><span class="en">Prizes</span></h2>
+      <p class="sub"><span class="ar">بطاقات شحن ورصيد حقيقي مقابل عملاتك.</span><span class="en">Real top-up cards and credit for your coins.</span></p>
+      <div class="prizes">
+        <div class="prize"><div class="pic" style="background:linear-gradient(150deg,#ff8a3d,#b5400e)">💎</div><b><span class="ar">بطاقات شحن فري فاير</span><span class="en">Free Fire top-up cards</span></b><span class="d"><span class="ar">جواهر لحسابك</span><span class="en">Diamonds for your account</span></span><span class="soon"><span class="ar">قريباً</span><span class="en">Soon</span></span></div>
+        <div class="prize"><div class="pic" style="background:linear-gradient(150deg,#ffd25a,#b07a10)">🎯</div><b><span class="ar">بطاقات شحن ببجي موبايل</span><span class="en">PUBG Mobile top-up cards</span></b><span class="d"><span class="ar">شدات UC لحسابك</span><span class="en">UC for your account</span></span><span class="soon"><span class="ar">قريباً</span><span class="en">Soon</span></span></div>
+        <div class="prize"><div class="pic" style="background:linear-gradient(150deg,#6ba8ff,#2c55c9)">📱</div><b><span class="ar">رصيد الجوال</span><span class="en">Phone credit</span></b><span class="d"><span class="ar">شحن خطك مباشرة</span><span class="en">Top up your line</span></span><span class="soon"><span class="ar">قريباً</span><span class="en">Soon</span></span></div>
+      </div>
+      <p class="note"><span class="ar">الاستبدال لم يُفتح بعد. ابدأ بجمع عملاتك الآن، فهي محفوظة في حسابك حتى يُفتح المتجر.</span><span class="en">Redeeming isn't open yet. Start collecting now: your coins stay in your account until the store opens.</span></p>
+    </section>
 
     <section id="features">
       <h2><span class="ar">ماذا في اللعبة؟</span><span class="en">What's inside</span></h2>
@@ -199,8 +261,8 @@
     </section>
 
     <section id="ranks">
-      <h2><span class="ar">ثماني رتب… والأخيرة سرّ</span><span class="en">Eight ranks… the last is a secret</span></h2>
-      <p class="sub"><span class="ar">لكل رتبة ثلاث درجات، والصعود يصعب كلما ارتفعت. اجمع العملات الفضية وعملات سيندر الذهبية.</span><span class="en">Three divisions each, and every climb gets harder. Earn silver coins and gold Cinder Coins.</span></p>
+      <h2><span class="ar">ثماني رتب حتى «بطل»</span><span class="en">Eight ranks up to Champion</span></h2>
+      <p class="sub"><span class="ar">لكل رتبة ثلاث درجات، والصعود يصعب كلما ارتفعت. من دايموند فما فوق تبدأ عملات سيندر الذهبية.</span><span class="en">Three divisions each, and every climb gets harder. From Diamond up, wins pay gold Cinder Coins.</span></p>
       <div class="ranks">
         <span class="rank" style="border-color:#d08a4e;color:#d08a4e"><span class="ar">برونز</span><span class="en">Bronze</span></span>
         <span class="rank" style="border-color:#dde5f0;color:#dde5f0"><span class="ar">سيلفر</span><span class="en">Silver</span></span>
@@ -209,7 +271,7 @@
         <span class="rank" style="border-color:#7db8ff;color:#7db8ff"><span class="ar">دايموند</span><span class="en">Diamond</span></span>
         <span class="rank" style="border-color:#c3a6ff;color:#c3a6ff"><span class="ar">ماستر</span><span class="en">Master</span></span>
         <span class="rank" style="border-color:#ff7a7a;color:#ff7a7a"><span class="ar">غراند ماستر</span><span class="en">Grandmaster</span></span>
-        <span class="rank mystery">???</span>
+        <span class="rank champ"><span class="ar">بطل</span><span class="en">Champion</span></span>
       </div>
     </section>
 
@@ -227,7 +289,7 @@
 
     <section>
       <div class="cta">
-        <h2><span class="ar">جاهز للقتال؟</span><span class="en">Ready to fight?</span></h2>
+        <h2><span class="ar">ابدأ بجمع عملاتك اليوم</span><span class="en">Start collecting today</span></h2>
         <a class="btn download" href="https://github.com/yousefdd/push-up-adventure-battle-app/releases/latest/download/PushUpAdventureBattle.apk">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m6 11 6 6 6-6"/><path d="M4 21h16"/></svg>
           <span><span class="ar">حمّل اللعبة</span><span class="en">Get the game</span></span>
